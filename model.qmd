@@ -1,0 +1,201 @@
+---
+title: "Model"
+format:
+  html:
+    code-fold: true
+---
+
+```{python}
+from palmerpenguins import penguins
+from pandas import get_dummies
+import numpy as np
+from sklearn.linear_model import LinearRegression
+from sklearn import preprocessing
+
+from vetiver import VetiverModel
+from vetiver import VetiverAPI
+
+import pins
+from vetiver import vetiver_pin_write
+
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+import numpy as np
+
+from sklearn.tree import DecisionTreeRegressor
+
+import duckdb
+```
+
+## Get Data
+
+```{python}
+con = duckdb.connect('my-db.duckdb')
+df = con.execute("SELECT * FROM penguins").fetchdf().dropna()
+con.close()
+
+```
+
+## Define Model and Fit
+
+```{python}
+X = get_dummies(df[['bill_length_mm', 'species', 'sex']], drop_first = True)
+y = df['body_mass_g']
+
+model = LinearRegression().fit(X, y)
+```
+
+## Get some information
+
+```{python}
+print(f"R^2 {model.score(X,y)}")
+print(f"Intercept {model.intercept_}")
+print(f"Columns {X.columns}")
+print(f"Coefficients {model.coef_}")
+
+y_pred = model.predict(X)
+
+rmse = np.sqrt(mean_squared_error(y, y_pred))
+
+print(f"RMSE: {rmse}")
+```
+
+## What if we tried some other models?
+
+```{python}
+
+
+# Assuming you have a dataset `X` for features and `y` for the target variable
+
+# Step 1: Split the data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Step 2: Train the model
+# Let's improve his model. This isn't some elementary 377 class where we train on all our data
+# We're not animals
+model1 = LinearRegression()
+model1.fit(X_train, y_train)
+
+# Step 3: Make predictions on the testing set
+y_pred1 = model1.predict(X_test)
+
+# Step 4: Calculate RMSE
+rmse = np.sqrt(mean_squared_error(y_test, y_pred1))
+
+print(f"RMSE: {rmse}")
+
+```
+
+# It's worse =(
+
+# Maybe the other one overfit
+
+# What if we did more predictors?
+
+```{python}
+
+X = pd.get_dummies(df[['bill_length_mm', 'bill_depth_mm', 'flipper_length_mm', 'year', 'species', 'island', 'sex']], drop_first=True)
+y = df['body_mass_g']
+
+# Step 1: Split the data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+
+model2 = LinearRegression()
+model2.fit(X_train, y_train)
+
+# Step 3: Make predictions on the testing set
+y_pred2 = model2.predict(X_test)
+
+# Step 4: Calculate RMSE
+rmse = np.sqrt(mean_squared_error(y_test, y_pred2))
+
+print(f"RMSE: {rmse}")
+
+```
+
+# Better. What about other models?
+
+```{python}
+
+
+# For classification
+tree_model = DecisionTreeRegressor()
+tree_model.fit(X_train, y_train)
+y_pred_tree = tree_model.predict(X_test)
+
+
+# Step 4: Calculate RMSE
+rmse = np.sqrt(mean_squared_error(y_test, y_pred_tree))
+
+print(f"RMSE: {rmse}")
+```
+
+# let's tune some hyper parameters!
+
+```{python}
+from sklearn.model_selection import GridSearchCV
+
+# Define the model
+tree_model = DecisionTreeRegressor()
+
+# Define the parameters grid
+param_grid = {
+    'max_depth': [3, 5, 7, 10],
+    'min_samples_split': [2, 5, 10],
+    'min_samples_leaf': [1, 2, 4],
+}
+
+# Perform grid search
+grid_search = GridSearchCV(estimator=tree_model, param_grid=param_grid, cv=5, scoring='neg_mean_squared_error', n_jobs=-1)
+grid_search.fit(X_train, y_train)
+
+# Get the best model
+best_tree_model = grid_search.best_estimator_
+
+# Predict and evaluate
+y_pred = best_tree_model.predict(X_test)
+rmse = np.sqrt(mean_squared_error(y_test, y_pred))
+
+```
+
+```{python}
+rmse
+```
+
+# Better, but still worse that linear. Let's go with linear for now.model2 was our best model, so we'll vetiverize that
+
+```{python}
+
+v = VetiverModel(model2, model_name='penguin_model', prototype_data=X)
+
+```
+
+```{python}
+
+
+# Create a board that allows pickled models
+board = pins.board_folder('data/model', allow_pickle_read=True)
+
+# Assuming 'v' is your VetiverModel object
+# Pin the model to the board
+vetiver_pin_write(board, v, 'penguin_model')
+
+
+
+
+```
+
+```{python}
+b = pins.board_folder('data/model', allow_pickle_read=True)
+v = VetiverModel.from_pin(b, 'penguin_model')
+```
+
+```{python}
+from vetiver import VetiverAPI
+app = VetiverAPI(v, check_prototype = True)
+
+app.run(port = 8080)
+
+```
