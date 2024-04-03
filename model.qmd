@@ -8,6 +8,7 @@ format:
 ```{python}
 from palmerpenguins import penguins
 from pandas import get_dummies
+import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn import preprocessing
@@ -196,6 +197,6 @@ v = VetiverModel.from_pin(b, 'penguin_model')
 from vetiver import VetiverAPI
 app = VetiverAPI(v, check_prototype = True)
 
-app.run(port = 8080)
+#app.run(port = 8080)
 
 ```

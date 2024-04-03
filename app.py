@@ -1,67 +1,41 @@
-from shiny import App, render, ui, reactive
-import requests
+from palmerpenguins import penguins
+from pandas import get_dummies
+import numpy as np
+from sklearn.linear_model import LinearRegression
+from sklearn import preprocessing
 
-import logging
+from vetiver import VetiverModel
+from vetiver import VetiverAPI
 
-logging.basicConfig(
-    format='%(asctime)s - %(message)s',
-    level=logging.INFO
-)
 
-api_url = 'http://127.0.0.1:8080/predict'
+import pins
+from vetiver import vetiver_pin_write
 
-app_ui = ui.page_fluid(
-    ui.panel_title("Penguin Mass Predictor"), 
-    ui.layout_sidebar(
-        ui.panel_sidebar(
-            [ui.input_slider("bill_length", "Bill Length (mm)", 30, 60, 45, step = 0.1),
-            ui.input_select("sex", "Sex", ["Male", "Female"]),
-            ui.input_select("species", "Species", ["Adelie", "Chinstrap", "Gentoo"]),
-            ui.input_action_button("predict", "Predict")]
-        ),
-        ui.panel_main(
-            ui.h2("Penguin Parameters"),
-            ui.output_text_verbatim("vals_out"),
-            ui.h2("Predicted Penguin Mass (g)"), 
-            ui.output_text("pred_out")
-        )
-    )   
-)
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+import numpy as np
 
-def server(input, output, session):
-    logging.info("App start")
+from sklearn.tree import DecisionTreeRegressor
 
-    @reactive.Calc
-    def vals():
-        d = {
-            "bill_length_mm" : input.bill_length(),
-            "sex_male" : input.sex() == "Male",
-            "species_Gentoo" : input.species() == "Gentoo", 
-            "species_Chinstrap" : input.species() == "Chinstrap"
+import duckdb
 
-        }
-        return d
-    
-    @reactive.Calc
-    @reactive.event(input.predict)
-    def pred():
-        logging.info("Request Made")
-        r = requests.post(api_url, json = [vals()])
-        logging.info("Request Returned")
+# Assuming your data model folder is correctly pointed to by this path
+b = pins.board_folder('data/model', allow_pickle_read=True)
 
-        if r.status_code != 200:
-            logging.error("HTTP error returned")
+# Check what's inside the board
+print(b.pin_list())
 
-        return r.json().get('predict')[0]
+# Check versions for the specific pin
+print(b.pin_versions('penguin_model'))
 
-    @output
-    @render.text
-    def vals_out():
-        return f"{vals()}"
+# Load the model
+v = VetiverModel.from_pin(b, 'penguin_model', version='20240402T203910Z-baf25')
 
-    @output
-    @render.text
-    def pred_out():
-        return f"{round(pred())}"
+# Create and run the API
+vetiver_api = VetiverAPI(v)
+api = vetiver_api.app
 
-app = App(app_ui, server)
+app = VetiverAPI(v, check_prototype = True)
+
+app.run(port = 8080)

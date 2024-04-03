@@ -1,11 +1,31 @@
 ---
-title: "378FinalNew"
+title: "An Exploration of Palmer Penguins"
 ---
 
-This is a Quarto website.
+# Welcome to the Penguin Data Science Project
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+Explore the fascinating world of Palmer Penguins through data analysis and interactive modeling. If you're not interested in that, then enjoy these cute penguin pictures!
 
-```{r}
-1 + 1
-```
+<div>
+
+<img src="images/image1.jpeg" alt="Alt text 1" style="margin-right: 2%;" width="50%"/> <img src="images/image2.jpg" alt="Alt text 2" width="39%"/>
+
+</div>
+
+## Discover Insights
+
+Delve into our exploratory data analysis and uncover intriguing patterns and relationships within the penguin data.
+
+<img src="images/image3.jpg" alt="Alt text" style="max-width: 100%; height: auto;"/>
+
+## Interactive Modeling
+
+We also made an app based on our model! Unfortunately it is hosted locally, so you'll need to to run it on your own machine to see it for yourself. You can download it from the repository [here](https://github.com/evhoch/Math378).
+
+<img src="images/image4.jpg" alt="Alt text" style="max-width: 100%; height: auto;"/>
+
+## Learn More
+
+Find out more about the project's background, the data, and the methodologies on our [About page](https://evhoch.github.io/Math378/about.html).
+
+We invite you to explore, interact, and gain insights from our data-driven journey with the Palmer Penguins.

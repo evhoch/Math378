@@ -1,9 +1,21 @@
 ---
-title: "About"
+title: About
 ---
 
-About this site
+# Project Overview
 
-```{r}
-1 + 1
-```
+This project is a practical application of DevOps principles within a data science context, following the "DevOps for Data Science" textbook. It involves exploratory data analysis (EDA), model building, and deployment using the Palmer Penguins dataset.
+
+## Exploratory Data Analysis
+
+The initial phase involved conducting an EDA on the Palmer Penguins dataset to identify key variables and understand data distributions, providing insights into the data's underlying patterns and relationships. The model tab of the website walks readers through the EDA process.
+
+## Model Development
+
+Subsequently, a predictive model was developed to analyze the dataset, focusing on understanding the factors influencing penguin body mass. The modeling process included data preprocessing, feature selection, and model evaluation.
+
+## Deployment with Vetiver
+
+The final stage involved deploying the model through a Shiny app using the `vetiver` package. This deployment demonstrates the operationalization of the model, allowing for interactive user engagement and further exploration of the model's predictive capabilities.
+
+The project exemplifies the integration of data science and DevOps practices, showcasing the end-to-end process from data analysis to model deployment.

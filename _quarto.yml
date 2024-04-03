@@ -10,7 +10,7 @@ website:
       - href: about.qmd
         text: About
       - href: eda.qmd
-        text: EDA  # EDA stands for Exploratory Data Analysis
+        text: EDA
       - href: model.qmd
         text: Model
 
@@ -21,3 +21,4 @@ format:
     toc: true
 
 editor: visual
+

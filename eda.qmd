@@ -8,20 +8,23 @@ format:
 ## Penguin Size and Mass by Sex and Species
 
 ```{R}
+# Load the required packages
 library(caret)
-```
-
-```{r}
+library(caret)
 library(palmerpenguins)
 library(dplyr)
 library(ggplot2)
-
-df <- palmerpenguins::penguins
+library(knitr)
 ```
+
+Let's start by looking at the data.
 
 ```{r}
-head(df)
+df <- palmerpenguins::penguins
+kable(head(df), caption = "Preview of the Dataset")
 ```
+
+We can also examine the summary statistics of the dataset.
 
 ```{r}
 df %>%
@@ -32,32 +35,51 @@ df %>%
       \(x) mean(x, na.rm = TRUE)
       )
     ) %>%
-  knitr::kable()
+  knitr::kable(caption = "Summary of the Dataset")
 ```
 
 ## Penguin Size vs Mass by Species
 
-```{r}
+Let's make some visuals to better understand the relationship between species, body mass and bill length.
+
+```{r warning=FALSE, message=FALSE}
 df %>%
   ggplot(aes(x = bill_length_mm, y = body_mass_g, color = species)) +
   geom_point() + 
   geom_smooth(method = "lm")
 ```
 
-## That's very pretty. I'd like to know some other things though, and I like python more
+That's very pretty. We also use python to perform similar exploration.For example, how clean is the dataset? Are there a lot of null or missing values?
 
 ```{python}
+import palmerpenguins
+import pandas as pd
+
+df = palmerpenguins.load_penguins()
 df.info()
+
 ```
 
-## That's a clean dataset! Let's see what the species and island breakdowns are.
+That's a clean dataset! Let's see what the species and island breakdowns are.
 
 ```{python}
-print(pd.DataFrame(df['species'].value_counts()))
+pd.DataFrame(df['species'].value_counts()).style.set_table_styles(
+    [{'selector': 'tr:hover',
+      'props': [('background-color', 'yellow')]},
+     {'selector': 'th',
+      'props': [('background-color', 'lightblue'),
+                ('color', 'white')]}]
+).set_caption("Penguin Counts by Species")
 ```
 
 ```{python}
-print(pd.DataFrame(df['island'].value_counts()))
+pd.DataFrame(df['island'].value_counts()).style.set_table_styles(
+    [{'selector': 'tr:hover',
+      'props': [('background-color', 'yellow')]},
+     {'selector': 'th',
+      'props': [('background-color', 'lightblue'),
+                ('color', 'white')]}]
+).set_caption("Penguin COunts by Island")
 ```
 
 ```{R}
@@ -69,13 +91,13 @@ ggplot(data = penguins, aes(x = island, fill = species)) +
   theme_minimal()
 ```
 
-# Neato! Now let's see the same breakdown as before, but for island instead of population
+Neato! Now let's see the same breakdown as before, but for island instead of population
 
-```{R}
+```{r warning=FALSE, message=FALSE}
 df %>%
   ggplot(aes(x = bill_length_mm, y = body_mass_g, color = island)) +
   geom_point() + 
   geom_smooth(method = "lm")
 ```
 
-# Interesting. Seems less pronounced than species.Also, the groupings that appear are probably just masked versions of the species effects.
+Interesting. The effect seems less pronounced than for species. Additionally, the way the species are grouped across islands, this graph may just be capturing masked versions of the species' effect on body mass and bill length. Let's move on to modelling! By heading over to the model tab, you can step through the process of building and evaluating models.
