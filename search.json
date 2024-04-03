@@ -74,7 +74,28 @@
     "href": "about.html",
     "title": "About",
     "section": "",
-    "text": "About this site\n\n1 + 1\n\n[1] 2"
+    "text": "This project is a practical application of DevOps principles within a data science context, following the “DevOps for Data Science” textbook. It involves exploratory data analysis (EDA), model building, and deployment using the Palmer Penguins dataset.\n\n\nThe initial phase involved conducting an EDA on the Palmer Penguins dataset to identify key variables and understand data distributions, providing insights into the data’s underlying patterns and relationships.\n\n\n\nSubsequently, a predictive model was developed to analyze the dataset, focusing on understanding the factors influencing penguin body mass. The modeling process included data preprocessing, feature selection, and model evaluation.\n\n\n\nThe final stage involved deploying the model through a Shiny app using the vetiver package. This deployment demonstrates the operationalization of the model, allowing for interactive user engagement and further exploration of the model’s predictive capabilities.\nThe project exemplifies the integration of data science and DevOps practices, showcasing the end-to-end process from data analysis to model deployment."
+  },
+  {
+    "objectID": "about.html#exploratory-data-analysis",
+    "href": "about.html#exploratory-data-analysis",
+    "title": "About",
+    "section": "",
+    "text": "The initial phase involved conducting an EDA on the Palmer Penguins dataset to identify key variables and understand data distributions, providing insights into the data’s underlying patterns and relationships."
+  },
+  {
+    "objectID": "about.html#model-development",
+    "href": "about.html#model-development",
+    "title": "About",
+    "section": "",
+    "text": "Subsequently, a predictive model was developed to analyze the dataset, focusing on understanding the factors influencing penguin body mass. The modeling process included data preprocessing, feature selection, and model evaluation."
+  },
+  {
+    "objectID": "about.html#deployment-with-vetiver",
+    "href": "about.html#deployment-with-vetiver",
+    "title": "About",
+    "section": "",
+    "text": "The final stage involved deploying the model through a Shiny app using the vetiver package. This deployment demonstrates the operationalization of the model, allowing for interactive user engagement and further exploration of the model’s predictive capabilities.\nThe project exemplifies the integration of data science and DevOps practices, showcasing the end-to-end process from data analysis to model deployment."
   },
   {
     "objectID": "index.html",
