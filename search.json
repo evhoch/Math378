@@ -100,8 +100,29 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "378FinalNew",
+    "title": "An Exploration of Palmer Penguins",
     "section": "",
-    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\n\n1 + 1\n\n[1] 2"
+    "text": "Explore the fascinating world of Palmer Penguins through data analysis and interactive modeling.\n\n\n\n\nDelve into our exploratory data analysis and uncover intriguing patterns and relationships within the penguin data.\n\n\n\nExperience our predictive model firsthand through our user-friendly Shiny app. Explore the App\n\n\n\nFind out more about the project’s background, the data, and the methodologies on our About page.\nWe invite you to explore, interact, and gain insights from our data-driven journey with the Palmer Penguins."
+  },
+  {
+    "objectID": "index.html#discover-insights",
+    "href": "index.html#discover-insights",
+    "title": "An Exploration of Palmer Penguins",
+    "section": "",
+    "text": "Delve into our exploratory data analysis and uncover intriguing patterns and relationships within the penguin data."
+  },
+  {
+    "objectID": "index.html#interactive-modeling",
+    "href": "index.html#interactive-modeling",
+    "title": "An Exploration of Palmer Penguins",
+    "section": "",
+    "text": "Experience our predictive model firsthand through our user-friendly Shiny app. Explore the App"
+  },
+  {
+    "objectID": "index.html#learn-more",
+    "href": "index.html#learn-more",
+    "title": "An Exploration of Palmer Penguins",
+    "section": "",
+    "text": "Find out more about the project’s background, the data, and the methodologies on our About page.\nWe invite you to explore, interact, and gain insights from our data-driven journey with the Palmer Penguins."
   }
 ]
