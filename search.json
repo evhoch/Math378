@@ -32,7 +32,7 @@
     "href": "model.html#what-if-we-tried-some-other-models",
     "title": "Model",
     "section": "What if we tried some other models?",
-    "text": "What if we tried some other models?\nLinear models are great, but they don’t always capture the full relationship. Let’s start by splitting the data into a test and training set. It’s better practice than training on all your data. We’ll start with the same linear model, but trained on the training set and tested on the test set. Then we’ll play with the number of predictors and try some more advanced models.\n\n\nCode\n# Step 1: Split the data\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)\n\n# Step 2: Train the model\n# We can't just train the model on all our data. What do we look like, savages?\n# \nmodel1 = LinearRegression()\nmodel1.fit(X_train, y_train)\n\n# Step 3: Make predictions on the testing set\ny_pred1 = model1.predict(X_test)\n\n# Step 4: Calculate RMSE\nrmse = np.sqrt(mean_squared_error(y_test, y_pred1))\n\nprint(f\"RMSE: {rmse}\")\n\n\nRMSE: 310.2846345747236\n\n\nIt’s worse =( It’s possible the first model overfit, but hard to say for sure.\n\nWhat if we did more predictors?\n\n\nCode\n# Let's try all the variables\nX = pd.get_dummies(df[['bill_length_mm', 'bill_depth_mm', 'flipper_length_mm', 'year', 'species', 'island', 'sex']], drop_first=True)\ny = df['body_mass_g']\n\n# Step 1: Split the data\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)\n\n\nmodel2 = LinearRegression()\nmodel2.fit(X_train, y_train)\n\n# Step 3: Make predictions on the testing set\ny_pred2 = model2.predict(X_test)\n\n# Step 4: Calculate RMSE\nrmse = np.sqrt(mean_squared_error(y_test, y_pred2))\n\nprint(f\"RMSE: {rmse}\")\n\n\nRMSE: 275.14079947919276\n\n\nThis one is much better. ### What about other models?\n\n\nCode\n# For classification\ntree_model = DecisionTreeRegressor()\ntree_model.fit(X_train, y_train)\ny_pred_tree = tree_model.predict(X_test)\n\n\n# Step 4: Calculate RMSE\nrmse = np.sqrt(mean_squared_error(y_test, y_pred_tree))\n\nprint(f\"RMSE: {rmse}\")\n\n\nRMSE: 431.685779173114"
+    "text": "What if we tried some other models?\nLinear models are great, but they don’t always capture the full relationship. Let’s start by splitting the data into a test and training set. It’s better practice than training on all your data. We’ll start with the same linear model, but trained on the training set and tested on the test set. Then we’ll play with the number of predictors and try some more advanced models.\n\n\nCode\n# Step 1: Split the data\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)\n\n# Step 2: Train the model\n# We can't just train the model on all our data. What do we look like, savages?\n# \nmodel1 = LinearRegression()\nmodel1.fit(X_train, y_train)\n\n# Step 3: Make predictions on the testing set\ny_pred1 = model1.predict(X_test)\n\n# Step 4: Calculate RMSE\nrmse = np.sqrt(mean_squared_error(y_test, y_pred1))\n\nprint(f\"RMSE: {rmse}\")\n\n\nRMSE: 310.2846345747236\n\n\nIt’s worse =( It’s possible the first model overfit, but hard to say for sure.\n\nWhat if we did more predictors?\n\n\nCode\n# Let's try all the variables\nX = pd.get_dummies(df[['bill_length_mm', 'bill_depth_mm', 'flipper_length_mm', 'year', 'species', 'island', 'sex']], drop_first=True)\ny = df['body_mass_g']\n\n# Step 1: Split the data\nX_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)\n\n\nmodel2 = LinearRegression()\nmodel2.fit(X_train, y_train)\n\n# Step 3: Make predictions on the testing set\ny_pred2 = model2.predict(X_test)\n\n# Step 4: Calculate RMSE\nrmse = np.sqrt(mean_squared_error(y_test, y_pred2))\n\nprint(f\"RMSE: {rmse}\")\n\n\nRMSE: 275.14079947919276\n\n\nThis one is much better. ### What about other models?\n\n\nCode\n# For classification\ntree_model = DecisionTreeRegressor()\ntree_model.fit(X_train, y_train)\ny_pred_tree = tree_model.predict(X_test)\n\n\n# Step 4: Calculate RMSE\nrmse = np.sqrt(mean_squared_error(y_test, y_pred_tree))\n\nprint(f\"RMSE: {rmse}\")\n\n\nRMSE: 423.10816866146615"
   },
   {
     "objectID": "model.html#lets-tune-some-hyper-parameters",
@@ -53,7 +53,7 @@
     "href": "model.html#saving-and-exporting-the-model",
     "title": "Model",
     "section": "Saving and exporting the model",
-    "text": "Saving and exporting the model\nLet’s use the ‘vetiver’ package to save the model.\n\n\nCode\nv = VetiverModel(model2, model_name='penguin_model', prototype_data=X)\n\n\nHere we send it to a pin board that allows us to access the model later.\n\n\nCode\n# Create a board that allows pickled models\nboard = pins.board_folder('data/model', allow_pickle_read=True)\n\n# Assuming 'v' is your VetiverModel object\n# Pin the model to the board\nvetiver_pin_write(board, v, 'penguin_model')\n\n\nModel Cards provide a framework for transparent, responsible reporting. \n Use the vetiver `.qmd` Quarto template as a place to start, \n with vetiver.model_card()\nWriting pin:\nName: 'penguin_model'\nVersion: 20240420T153729Z-07ee9\n\n\nFinally, here is an example of how to reload and run the model as a locally hosted website.\n\n\nCode\nb = pins.board_folder('data/model', allow_pickle_read=True)\nv = VetiverModel.from_pin(b, 'penguin_model')\n\n\n\n\nCode\nfrom vetiver import VetiverAPI\napp = VetiverAPI(v, check_prototype = True)\n\n#app.run(port = 8080)"
+    "text": "Saving and exporting the model\nLet’s use the ‘vetiver’ package to save the model.\n\n\nCode\nv = VetiverModel(model2, model_name='penguin_model', prototype_data=X)\n\n\nHere we send it to a pin board that allows us to access the model later.\n\n\nCode\n# Create a board that allows pickled models\nboard = pins.board_folder('data/model', allow_pickle_read=True)\n\n# Assuming 'v' is your VetiverModel object\n# Pin the model to the board\nvetiver_pin_write(board, v, 'penguin_model')\n\n\nModel Cards provide a framework for transparent, responsible reporting. \n Use the vetiver `.qmd` Quarto template as a place to start, \n with vetiver.model_card()\nWriting pin:\nName: 'penguin_model'\nVersion: 20240420T154205Z-07ee9\n\n\nFinally, here is an example of how to reload and run the model as a locally hosted website.\n\n\nCode\nb = pins.board_folder('data/model', allow_pickle_read=True)\nv = VetiverModel.from_pin(b, 'penguin_model')\n\n\n\n\nCode\nfrom vetiver import VetiverAPI\napp = VetiverAPI(v, check_prototype = True)\n\n#app.run(port = 8080)"
   },
   {
     "objectID": "eda.html",
@@ -107,28 +107,28 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "A Journey Visualization and Modelling",
+    "title": "A Journey of Visualization and Modelling",
     "section": "",
     "text": "Explore the fascinating world of Palmer Penguins through data analysis and interactive modeling. If you’re not interested in that, then enjoy these cute penguin pictures!\n\n \n\n\n\nDelve into our exploratory data analysis and uncover intriguing patterns and relationships within the penguin data.\n\n\n\n\nWe also made an app based on our model! Unfortunately it is hosted locally, so you’ll need to to run it on your own machine to see it for yourself. You can download it from the repository here.\n\n\n\n\nFind out more about the project’s background, the data, and the methodologies on our About page.\nWe invite you to explore, interact, and gain insights from our data-driven journey with the Palmer Penguins."
   },
   {
     "objectID": "index.html#discover-insights",
     "href": "index.html#discover-insights",
-    "title": "A Journey Visualization and Modelling",
+    "title": "A Journey of Visualization and Modelling",
     "section": "",
     "text": "Delve into our exploratory data analysis and uncover intriguing patterns and relationships within the penguin data."
   },
   {
     "objectID": "index.html#interactive-modeling",
     "href": "index.html#interactive-modeling",
-    "title": "A Journey Visualization and Modelling",
+    "title": "A Journey of Visualization and Modelling",
     "section": "",
     "text": "We also made an app based on our model! Unfortunately it is hosted locally, so you’ll need to to run it on your own machine to see it for yourself. You can download it from the repository here."
   },
   {
     "objectID": "index.html#learn-more",
     "href": "index.html#learn-more",
-    "title": "A Journey Visualization and Modelling",
+    "title": "A Journey of Visualization and Modelling",
     "section": "",
     "text": "Find out more about the project’s background, the data, and the methodologies on our About page.\nWe invite you to explore, interact, and gain insights from our data-driven journey with the Palmer Penguins."
   }
